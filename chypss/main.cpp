@@ -35,7 +35,6 @@
 #include <iostream>
 #include "mfem.hpp"
 
-using namespace std;
 using namespace mfem;
 
 static ODESolver* ODESolverSelect(const int a_ode_solver_type) {
@@ -77,7 +76,7 @@ static ODESolver* ODESolverSelect(const int a_ode_solver_type) {
       return new SDIRK34Solver();
       break;
     default:
-      cout << "Unknown ODE solver type: " << a_ode_solver_type << '\n';
+      std::cout << "Unknown ODE solver type: " << a_ode_solver_type << '\n';
       return nullptr;
   }
 }
@@ -200,7 +199,7 @@ int main(int argc, char* argv[]) {
   bool comp = false;
 
   int precision = 8;
-  cout.precision(precision);
+  std::cout.precision(precision);
 
   OptionsParser args(argc, argv);
   args.AddOption(&mesh_file, "-m", "--mesh", "Mesh file to use.");
@@ -236,13 +235,13 @@ int main(int argc, char* argv[]) {
       "Compare traditional approach (from example) to more modified solution.");
   args.Parse();
   if (!args.Good()) {
-    args.PrintUsage(cout);
+    args.PrintUsage(std::cout);
     MPI_Finalize();
     return 1;
   }
 
   if (myid == 0 && visit) {
-    args.PrintOptions(cout);
+    args.PrintOptions(std::cout);
   }
 
   // 4. Define the ODE solver used for time integration. Several implicit
@@ -385,7 +384,7 @@ int main(int argc, char* argv[]) {
     if (visit) {
       if (last_step || (ti % vis_steps) == 0) {
         if (myid == 0) {
-          cout << "step " << ti << ", t = " << t << endl;
+          std::cout << "step " << ti << ", t = " << t << std::endl;
         }
 
         u_gf.SetFromTrueDofs(u);
